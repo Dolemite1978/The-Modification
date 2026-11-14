@@ -1705,9 +1705,9 @@ beginSubroutine: s32'RoundInit'
   callSubroutine: s32'cmnRoundInit'
   walkFSpeed: 5600
   walkBSpeed: 4800
-  initDashFSpeed: 14000
+  initDashFSpeed: 13100
   fDashAccelSpeed: 560
-  fDashFriction: 100
+  fDashFriction: 95
   bDashXSpeed: 0
   bDashYSpeed: 0
   bDashGravity: 0
@@ -3568,82 +3568,18 @@ endState:
 
 beginState: s32'CmnActFDash'
   upon: (IMMEDIATE)
-    checkCurrentStateEntryName: s32'CmnFDash'
-    if: Mem(Tmp)
-      setCommonActionMark: 1
-      enableBurst: 1
-      enableRomanCancelMove: 1
-      upon: (IDLING)
-        addTensionValAtMoveBBS: 12
-        ifOperation: (IS_EQUAL), Mem(ActionTime), Val(1)
-          displayModel: 0
-          enableJump: 1
-          storeValue: Mem(ObjReg0), Val(1)
-          enableSpecials: 1
-          sendSignalToAction: s32'SLY_010_bat_move', (SIGNAL0)
-          createObject: s32'SLY_Step_Start', (PLAYER)
-          createObject: s32'SLY_Step_Start_bat', (PLAYER)
-        endIf: 
-        ifOperation: (IS_EQUAL), Mem(ActionTime), Val(7)
-          setNoCollision: 0
-          enableJump: 0
-          storeValue: Mem(ObjReg0), Val(0)
-          enableSpecials: 0
-          physicsXImpulse: Val(60000)
-        endIf: 
-        ifOperation: (IS_EQUAL), Mem(ActionTime), Val(12)
-          setNoCollision: 1
-          physicsXImpulse: Val(0)
-          faceOpponent: 
-          createObject: s32'SLY_Step_End_reverse', (PLAYER)
-          createObject: s32'SLY_Step_End_bat', (PLAYER)
-        endIf: 
-        ifOperation: (IS_EQUAL), Mem(ActionTime), Val(18)
-          gotoLabelRequests: s32'end'
-        endIf: 
-      endUpon: 
-    endIf: 
+    callSubroutineWithArgs: s32'cmnFDash', Val(0), Val(0), Val(0), Val(0)
   endUpon: 
-  checkCurrentStateEntryName: s32'Cancel_FDash'
-  gotoLabelIf: s32'Cancel_FDash', Mem(Tmp)
-  sprite: s32'sly000_00ex', 30
-  sprite: s32'sly000_00', 2147483647
+  sprite: s32'sly500_00', 1
+  sprite: s32'sly500_01', 1
+  sprite: s32'sly500_02', 1
+  sprite: s32'sly500_03', 1
   endLabel: 
-  gotoLabel: s32'end'
-  beginLabel: s32'Cancel_FDash'
-  sprite: s32'sly000_00ex', 30
-  callSubroutine: s32'cmnFDashCancel'
-  clearRegisteredUponCode: (IDLING)
-  upon: (IDLING)
-    addTensionValAtMoveBBS: 12
-    ifOperation: (IS_EQUAL), Mem(ActionTime), Val(1)
-      displayModel: 0
-      sendSignalToAction: s32'SLY_010_bat_move', (SIGNAL0)
-      createObject: s32'SLY_Step_Start', (PLAYER)
-      createObject: s32'SLY_Step_Start_bat', (PLAYER)
-    endIf: 
-    ifOperation: (IS_EQUAL), Mem(ActionTime), Val(3)
-      clearRegisteredUponCode: (BEFORE_EXIT)
-    endIf: 
-    ifOperation: (IS_EQUAL), Mem(ActionTime), Val(7)
-      setNoCollision: 0
-      physicsXImpulse: Val(40000)
-    endIf: 
-    ifOperation: (IS_EQUAL), Mem(ActionTime), Val(18)
-      setNoCollision: 1
-      physicsXImpulse: Val(0)
-      faceOpponent: 
-      createObject: s32'SLY_Step_End', (PLAYER)
-      createObject: s32'SLY_Step_End_bat', (PLAYER)
-    endIf: 
-    ifOperation: (IS_EQUAL), Mem(ActionTime), Val(26)
-      gotoLabelRequests: s32'end'
-    endIf: 
-  endUpon: 
-  sprite: s32'sly000_00', 2147483647
+  beginLabel: s32'loop'
+  sprite: s32'sly500_04', 11
+  createObject: s32'SLY_500_bat_start', (PLAYER)
   endLabel: 
-  beginLabel: s32'end'
-  jumpToState: s32'_NEUTRAL'
+  gotoLabel: s32'loop'
 endState: 
 
 beginState: s32'CmnActFDashStop'
